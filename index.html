@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#message-input").on("keydown", function (event) {
+          if (event.keyCode == 13) {
+            var message = $(this).val();
+            sendMessage(message);
+            $(this).val("");
+          }
+        });
+      });
+      $("#send-button").click(function sendMessage(message) {
+        var message = $("#message-input").val();
+        if (message.trim() !== "") {
+          $.ajax({
+            type: "POST",
+            url: "index.php",
+            data: { message: message },
+            success: function (response) {
+              $("#chat-window").append(
+                '<div class="bot-message">' + response + "</div>"
+              );
+            },
+          });
+        }
+      });
+    </script>
+    <style>
+      #chat-window {
+        height: 300px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .bot-message {
+        background-color: #f1f1f1;
+        padding: 5px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="chat-window">
+        <!-- Nội dung trò chuyện sẽ hiển thị ở đây -->
+      </div>
+      <input
+        type="text"
+        id="message-input"
+        placeholder="Type your message..."
+      />
+    </div>
+  </body>
+</html>
